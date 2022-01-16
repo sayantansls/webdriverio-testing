@@ -4,25 +4,27 @@ module.exports = class BasePage {
         this.appUrl = browser.config.baseUrl;
     }
 
-    get siteLogoButton() {
-        return browser.$('//div[@id="site-logo"]');
-    }
-
-    get pageTitle() {
-        return browser.$('//div[@class="header-bar"]').$('a');
-    }
-
     open() {
         browser.maximizeWindow();
         return browser.url(this.appUrl);
     }
 
-    getPageTitle() {
-        expect(this.pageTitle).toExist();
-        return this.pageTitle.getText();
-    }
-
-    getTopBarOptionByName(optionName) {
-        return browser.$(`//ul/li/a[contains(text(), "${optionName}")]`);
+    installGetters(options) {
+        const { selectors, type } = options;
+        for (const key of Object.keys(selectors)) {
+            if (type == 'multi') {
+                Object.defineProperty(this, key, {
+                    get() {
+                        return browser.$$(selectors[key]);
+                    }
+                });
+            } else {
+                Object.defineProperty(this, key, {
+                    get() {
+                        return browser.$(selectors[key]);
+                    }
+                });
+            }
+        }
     }
 }
