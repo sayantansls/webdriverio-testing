@@ -4,9 +4,9 @@ module.exports = class BasePage {
         this.appUrl = browser.config.baseUrl;
     }
 
-    open() {
+    open(urlPath) {
         browser.maximizeWindow();
-        return browser.url(this.appUrl);
+        return browser.url(urlPath);
     }
 
     installGetters(options) {
@@ -26,5 +26,9 @@ module.exports = class BasePage {
                 });
             }
         }
+    }
+
+    getTopBarOptionByName(optionName) {
+        return browser.$(`//ul/li/a[contains(text(), "${optionName}")]`);
     }
 }

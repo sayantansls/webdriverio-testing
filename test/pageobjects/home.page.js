@@ -16,21 +16,18 @@ class HomePage extends BasePage {
         super();
         this.installGetters({ selectors: singleSelectors, type: 'single' });
         this.installGetters({ selectors: multiSelectors, type: 'multi' });
-        this.pageUrl = new URL('/home', this.appUrl);
+        this.pageUrl = this.appUrl;
     }
 
     openPage() {
-        this.open();
+        this.open(this.pageUrl);
         this.pageContent.waitForDisplayed({ timeout: 5000 });
     }
 
-    goHomeByLogo() {
+    navigateToPage() {
         expect(this.siteLogoButton).toBeDisplayed();
         this.siteLogoButton.click();
-    }
-
-    getTopBarOptionByName(optionName) {
-        return browser.$(`//ul/li/a[contains(text(), "${optionName}")]`);
+        this.pageContent.waitForDisplayed({ timeout: 5000 });
     }
 }
 
