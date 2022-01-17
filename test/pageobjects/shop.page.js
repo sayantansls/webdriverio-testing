@@ -9,7 +9,7 @@ class ShopPage extends BasePage {
     constructor() {
         super();
         this.installGetters({ selectors: singleSelectors, type: 'single' });
-        this.pageUrl = new URL('/shop/', this.appUrl);
+        this.pageUrl = new URL('/shop/', this.appUrl).href;
     }
 
     openPage() {
@@ -21,6 +21,7 @@ class ShopPage extends BasePage {
         const shopOption = this.getTopBarOptionByName('Shop');
         expect(shopOption).toBeDisplayed();
         shopOption.click();
+        this.sidebar.waitForDisplayed({ timeout: 5000 });
     }
 
 }

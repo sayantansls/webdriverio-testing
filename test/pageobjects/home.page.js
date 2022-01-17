@@ -4,10 +4,12 @@ const singleSelectors = {
     pageContent: '//div[@id="content"]',
     siteLogoButton: '//div[@id="site-logo"]',
     pageTitle: '//div[@class="header-bar"]//a',
+    arrivalsHeader: '//div[@id="text-22-sub_row_1-0-1-1-0"]//h2',
 }
 
 const multiSelectors = {
     pageSliders: '//div[@data-slide-duration]',
+    arrivalElements: '//*[@id="themify_builder_content-22"]/div[2]/div/div/div/div/div[2]/div',
 }
 
 class HomePage extends BasePage {
