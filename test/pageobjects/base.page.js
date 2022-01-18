@@ -4,7 +4,7 @@ module.exports = class BasePage {
         this.appUrl = browser.config.baseUrl;
     }
 
-    open(urlPath) {
+    async open(urlPath) {
         browser.maximizeWindow();
         return browser.url(urlPath);
     }
