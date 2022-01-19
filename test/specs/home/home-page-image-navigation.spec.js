@@ -1,6 +1,5 @@
-import HomeConstants from '../../utils/home/HomeConstants';
-
 const HomePage = require('../../pageobjects/home.page');
+const HomeConstants = require('../../utils/home/HomeConstants');
 
 describe('Home Page Images in Arrivals Navigation', () => {
 
