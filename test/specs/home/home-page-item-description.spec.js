@@ -2,9 +2,9 @@ const HomePage = require('../../pageobjects/home.page');
 const ProductPage = require('../../pageobjects/product.page');
 const HomeConstants = require('../../utils/home/HomeConstants');
 
-describe('Home Page Arrival Items Description', () => {
+describe('Home Page Arrival Item Description', () => {
 
-    it('verify item description present in Item page', async () => {
+    it('verify item description present in Product Page', async () => {
         // Check Home page has three arrivals only.
         await HomePage.openPage();
         const arrivals = await HomePage.arrivalElements;
@@ -15,24 +15,25 @@ describe('Home Page Arrival Items Description', () => {
         for (const [index, itemDetail] of HomeConstants.arrivalItems.entries()) {
             await arrivals[index].scrollIntoView();
             console.log(`Verify description for Arrival Item - ${itemDetail.itemName}`);
-
-            // Navigate to arrival item page.
-            const itemImg = await HomePage.getArrivalImgElem(index, itemDetail.itemName);
-            await itemImg.click();
-            await expect(browser).toHaveUrl(itemDetail.urlLink);
+            HomePage.navigateToProductPage({ index, itemDetail });
 
             // Verify arrival item details in product page.
             await expect(await ProductPage.productTitle).toHaveText(itemDetail.itemName);
-            // TODO: handle separate image link for product and offer price elements.
-            // await expect(await ProductPage.productImg).toHaveAttrContaining('src', itemDetail.imageLink);
-            // await expect(await ProductPage.productPrice).toHaveTextContaining(itemDetail.itemPrice);
+            await expect(await ProductPage.productImg).toHaveAttrContaining('src', ProductPage.getProductImgLink(itemDetail));
+            if (itemDetail.offerPrice) {
+                await expect(await ProductPage.originalPrice).toHaveTextContaining(itemDetail.offerPrice.origPrice);
+                await expect(await ProductPage.newPrice).toHaveTextContaining(itemDetail.offerPrice.newPrice);
+            } else {
+                await expect(await ProductPage.productPrice).toHaveTextContaining(itemDetail.itemPrice);
+            }
             await expect(await ProductPage.productDescription).toHaveText(itemDetail.description);
 
             // Scroll to, click and verify description tab contents.
             await ProductPage.tabsSection.scrollIntoView();
             const descriptionTab = await ProductPage.descriptionTab;
             await expect(descriptionTab).toHaveText('DESCRIPTION');
-            await expect(descriptionTab).toHaveElementClassContaining('active');
+            await ProductPage.checkTabSelected(descriptionTab); // Description tab is selected by default.
+            
             await expect(await ProductPage.tabDescriptionHeader).toHaveText('Product Description');
             await expect(await ProductPage.tabDescriptionContent).toHaveText(itemDetail.tabDescription);
             browser.url(HomePage.pageUrl);

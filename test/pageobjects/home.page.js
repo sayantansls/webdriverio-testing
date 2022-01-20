@@ -73,6 +73,13 @@ class HomePage extends BasePage {
         await expect(addToBasketElem).toBeDisplayed();
         return addToBasketElem;
     }
+
+    async navigateToProductPage(options) {
+        const { index, itemDetail } = options;
+        const itemImg = await this.getArrivalImgElem(index, itemDetail.itemName);
+        await itemImg.click();
+        await expect(browser).toHaveUrl(itemDetail.urlLink);
+    }
 }
 
 module.exports = new HomePage();
