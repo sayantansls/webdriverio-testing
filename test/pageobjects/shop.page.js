@@ -25,7 +25,6 @@ class ShopPage extends BasePage {
         const sidebarElem = await this.sidebar;
         await sidebarElem.waitForDisplayed({ timeout: 5000 });
     }
-
 }
 
 module.exports = new ShopPage();
