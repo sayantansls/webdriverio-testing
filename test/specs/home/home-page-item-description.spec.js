@@ -1,6 +1,7 @@
 const HomePage = require('../../pageobjects/home.page');
 const ProductPage = require('../../pageobjects/product.page');
 const HomeConstants = require('../../utils/home/HomeConstants');
+const ProductConstants = require('../../utils/product/ProductConstants');
 
 describe('Home Page Arrival Item Description', () => {
 
@@ -29,12 +30,13 @@ describe('Home Page Arrival Item Description', () => {
             await expect(await ProductPage.productDescription).toHaveText(itemDetail.description);
 
             // Scroll to, click and verify description tab contents.
+            const descriptionTabDetails = ProductConstants.descriptionTab;
             await ProductPage.tabsSection.scrollIntoView();
             const descriptionTab = await ProductPage.descriptionTab;
-            await expect(descriptionTab).toHaveText('DESCRIPTION');
+            await expect(descriptionTab).toHaveText(descriptionTabDetails.tabHeader);
             await ProductPage.checkTabSelected(descriptionTab); // Description tab is selected by default.
             
-            await expect(await ProductPage.tabDescriptionHeader).toHaveText('Product Description');
+            await expect(await ProductPage.tabDescriptionHeader).toHaveText(descriptionTabDetails.sectionHeader);
             await expect(await ProductPage.tabDescriptionContent).toHaveText(itemDetail.tabDescription);
             browser.url(HomePage.pageUrl);
         }

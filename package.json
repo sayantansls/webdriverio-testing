@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "devDependencies": {
+        "@faker-js/faker": "^6.0.0-alpha.3",
         "@wdio/cli": "^7.16.13",
         "@wdio/local-runner": "^7.16.13",
         "@wdio/mocha-framework": "^7.16.13",

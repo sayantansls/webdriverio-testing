@@ -54,19 +54,19 @@ class ProductPage extends BasePage {
         await tabElement.click();
     }
 
-    async getReviewImage(index) {
+    async getReviewImage(index = 0) {
         const reviewImgElem = await this.reviewImages[index];
         await expect(reviewImgElem).toBeDisplayed();
         return reviewImgElem;
     }
 
-    async getReviewDescription(index) {
+    async getReviewDescription(index = 0) {
         const reviewRatingElem = await this.reviewDescriptions[index];
         await expect(reviewRatingElem).toBeDisplayed();
         return reviewRatingElem;
     }
 
-    async getReviewRating(index) {
+    async getReviewRating(index = 0) {
         const reviewRatingElem = await this.reviewRatings[index];
         await expect(reviewRatingElem).toBeDisplayed();
         return reviewRatingElem;
@@ -93,6 +93,28 @@ class ProductPage extends BasePage {
         const fieldInput = await inputField.$(`${type}`);
         await fieldInput.setValue(inputText);
         await expect(await fieldInput.getValue()).toEqual(inputText);
+    }
+
+    async createStarRating(reviewRating) {
+        await expect(await this.reviewFormStars).toBeDisplayed();
+        const starRatingElement = await browser.$(`//p[@class="stars"]//a[@class="star-${reviewRating}"]`);
+        await expect(starRatingElement).toBeClickable();
+        await starRatingElement.click(); 
+    };
+
+    async createReview(reviewDetails) {
+        await this.createStarRating(reviewDetails.starRating);
+        await this.verifyTextInputField({ inputField: await this.reviewFormComment, type: 'textarea', inputText: reviewDetails.comment });
+        await this.verifyTextInputField({ inputField: await this.reviewFormAuthor, type: 'input', inputText: reviewDetails.author });
+        await this.verifyTextInputField({ inputField: await this.reviewFormEmail, type: 'input', inputText: reviewDetails.email });
+        await this.reviewSubmitButton.click();
+    }
+
+    getReviewFormTitleText(options) {
+        const { hasReview, itemName = null } = options;
+        let reviewFormTitle;
+        hasReview ? reviewFormTitle = 'Add a review' : reviewFormTitle = `Be the first to review “${itemName}”`;
+        return reviewFormTitle;
     }
 }
 

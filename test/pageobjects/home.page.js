@@ -5,6 +5,11 @@ const singleSelectors = {
     siteLogoButton: '//div[@id="site-logo"]',
     pageTitle: '//div[@class="header-bar"]//a',
     arrivalsHeader: '//div[@id="text-22-sub_row_1-0-1-1-0"]//h2',
+    viewBasketLink: '//a[@class="added_to_cart wc-forward"]',
+    menuItems: '//a[@class="wpmenucart-contents"]//span[@class="cartcontents"]',
+    menuAmount: '//a[@class="wpmenucart-contents"]//span[@class="amount"]',
+    emptyCartElem: '//a[@class="wpmenucart-contents empty-wpmenucart-visible"]',
+    menuCartElem: '//a[@class="wpmenucart-contents"]',
 }
 
 const multiSelectors = {
@@ -79,6 +84,18 @@ class HomePage extends BasePage {
         const itemImg = await this.getArrivalImgElem(index, itemDetail.itemName);
         await itemImg.click();
         await expect(browser).toHaveUrl(itemDetail.urlLink);
+    }
+
+    async getItemsFromCart(menuCartElem) {
+        const itemsElem = await menuCartElem.$('//span[@class="cartcontents"]');
+        await expect(itemsElem).toBeDisplayed();
+        return itemsElem;
+    }
+
+    async getAmountFromCart(menuCartElem) {
+        const amountElem = await menuCartElem.$('//span[@class="amount"]');
+        await expect(amountElem).toBeDisplayed();
+        return amountElem;
     }
 }
 
