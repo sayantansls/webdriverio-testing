@@ -1,6 +1,7 @@
 const HomePage = require('../../pageobjects/home.page');
 const ProductPage = require('../../pageobjects/product.page');
 const HomeConstants = require('../../utils/home/HomeConstants');
+const ProductConstants = require('../../utils/product/ProductConstants');
 
 describe('Home Page Arrival Item Reviews', () => {
 
@@ -80,8 +81,7 @@ describe('Home Page Arrival Item Reviews', () => {
         }
     });
 
-    // TODO: add handling for adding reviews.
-    it.skip('verify item with reviews present in Product Page', async () => {
+    it('verify item with reviews present in Product Page', async () => {
         const index = 1;
         const arrivals = await HomePage.arrivalElements;
         const itemDetail = HomeConstants.arrivalItems[index];
@@ -98,7 +98,8 @@ describe('Home Page Arrival Item Reviews', () => {
         expect(reviewsTab).toHaveText('REVIEWS (0)');
 
         // Create a review.
-        
+        const testReview = ProductConstants.testReview;
+        ProductPage.createReview(testReview);        
 
         // Verify details associated for item with reviews.
         await expect(await ProductPage.tabReviewsHeader).toHaveText('Reviews');
@@ -106,12 +107,9 @@ describe('Home Page Arrival Item Reviews', () => {
         await expect(await ProductPage.reviewFormTitle).toHaveText('Add a review');
         await expect(await ProductPage.reviewContainer).toExist();
         
-        const reviewItemElements = await ProductPage.reviewItems;
-        await expect(reviewItemElements).toBeElementsArrayOfSize(itemDetail.reviews.length);
-        for (const [index, reviewDetail] of itemDetail.reviews.entries()) {
-            await expect(await ProductPage.getReviewImage(index)).toExist();
-            await expect(await ProductPage.getReviewDescription(index)).toHaveText(reviewDetail.description);
-            await expect(await ProductPage.getReviewRating(index)).toHaveAttrContaining('title', `Rated ${reviewDetail.rating} out of 5`);
-        }
+        await expect(await ProductPage.reviewItems).toBeElementsArrayOfSize(1);
+        await expect(await ProductPage.getReviewImage()).toExist();
+        await expect(await ProductPage.getReviewDescription()).toHaveText(testReview.comment);
+        await expect(await ProductPage.getReviewRating()).toHaveAttrContaining('title', `Rated ${testReview.starRating} out of 5`);
     });
 });
