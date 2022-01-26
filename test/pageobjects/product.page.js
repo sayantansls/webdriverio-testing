@@ -109,6 +109,13 @@ class ProductPage extends BasePage {
         await this.verifyTextInputField({ inputField: await this.reviewFormEmail, type: 'input', inputText: reviewDetails.email });
         await this.reviewSubmitButton.click();
     }
+
+    getReviewFormTitleText(options) {
+        const { hasReview, itemName = null } = options;
+        let reviewFormTitle;
+        hasReview ? reviewFormTitle = 'Add a review' : reviewFormTitle = `Be the first to review “${itemName}”`;
+        return reviewFormTitle;
+    }
 }
 
 module.exports = new ProductPage();

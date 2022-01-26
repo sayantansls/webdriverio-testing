@@ -30,7 +30,9 @@ class HomeConstants {
             description: 'It would seem that everything that needs to be written about JavaScript has been written. Frankly, it is difficult to find a topic related to JavaScript that has not been discussed ad nauseam.',
             tabDescription: 'It would seem that everything that needs to be written about JavaScript has been written. Frankly, it is difficult to find a topic related to JavaScript that has not been discussed ad nauseam. However, JavaScript is changing at a rapid pace. ECMAScript 6 has the potential to transform the language and how we code in it. Node.js has already changed the way in which we write servers in JavaScript. Newer ideas such as React and Flux will drive the next iteration of the language.',
         },
-    ];
+    ]
+
+    basketLink = 'http://practice.automationtesting.in/basket/';
 }
 
 module.exports = new HomeConstants();

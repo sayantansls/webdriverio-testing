@@ -5,6 +5,8 @@ const ProductConstants = require('../../utils/product/ProductConstants');
 
 describe('Home Page Arrival Item Reviews', () => {
 
+    const reviewTabDetails = ProductConstants.reviewsTab;
+
     beforeEach(async () => {
         await HomePage.openPage();
     });
@@ -23,12 +25,14 @@ describe('Home Page Arrival Item Reviews', () => {
         const reviewsTab = await ProductPage.reviewsTab;
         await ProductPage.selectTab(reviewsTab);
         await ProductPage.checkTabSelected(reviewsTab);
-        expect(reviewsTab).toHaveText('REVIEWS (0)');
+        expect(reviewsTab).toHaveText(reviewTabDetails.tabHeader);
 
         // Verify details associated for item with no reviews.
-        await expect(await ProductPage.tabReviewsHeader).toHaveText('Reviews');
-        await expect(await ProductPage.noReviewsContent).toHaveText('There are no reviews yet.');
-        await expect(await ProductPage.reviewFormTitle).toHaveText(`Be the first to review “${itemDetail.itemName}”`);
+        await expect(await ProductPage.tabReviewsHeader).toHaveText(reviewTabDetails.sectionHeader);
+        await expect(await ProductPage.noReviewsContent).toHaveText(reviewTabDetails.noReviewContent);
+        await expect(await ProductPage.reviewFormTitle).toHaveText(
+            ProductPage.getReviewFormTitleText({ hasReview: false, itemName: itemDetail.itemName })
+        );
     });
 
     it('verify user can submit a review for an item in Product Page', async () => {
@@ -45,30 +49,31 @@ describe('Home Page Arrival Item Reviews', () => {
         const reviewsTab = await ProductPage.reviewsTab;
         await ProductPage.selectTab(reviewsTab);
         await ProductPage.checkTabSelected(reviewsTab);
-        expect(reviewsTab).toHaveText('REVIEWS (0)');
+        expect(reviewsTab).toHaveText(reviewTabDetails.tabHeader);
 
         // Verify review form attributes.
-        await expect(await ProductPage.reviewNotes).toHaveText('Your email address will not be published. Required fields are marked *');
+        const reviewFormHeaders = ProductConstants.reviewFormHeaders;
+        await expect(await ProductPage.reviewNotes).toHaveText(reviewFormHeaders.commentNotes);
         const formRating = await ProductPage.reviewFormRating;
-        await expect(await ProductPage.getReviewFormAttrLabel(formRating)).toHaveText('Your Rating');
+        await expect(await ProductPage.getReviewFormAttrLabel(formRating)).toHaveText(reviewFormHeaders.formRating);
         await expect(await ProductPage.reviewFormStars).toBeDisplayed();
 
         const testElementDetails = [
             {
                 element: await ProductPage.reviewFormComment,
-                label: 'Your Review *',
+                label: reviewFormHeaders.formComment,
                 type: 'textarea',
                 testValue: 'This is a dummy comment',
             },
             {
                 element: await ProductPage.reviewFormAuthor,
-                label: 'Name *',
+                label: reviewFormHeaders.formAuthor,
                 type: 'input',
                 testValue: 'Michael Scott',
             },
             {
                 element: await ProductPage.reviewFormEmail,
-                label: 'Email *',
+                label: reviewFormHeaders.formEmail,
                 type: 'input',
                 testValue: 'greatscottproductions@gmail.com',
             },
@@ -95,16 +100,16 @@ describe('Home Page Arrival Item Reviews', () => {
         const reviewsTab = await ProductPage.reviewsTab;
         await ProductPage.selectTab(reviewsTab);
         await ProductPage.checkTabSelected(reviewsTab);
-        expect(reviewsTab).toHaveText('REVIEWS (0)');
+        expect(reviewsTab).toHaveText(reviewTabDetails.tabHeader);
 
         // Create a review.
         const testReview = ProductConstants.testReview;
         ProductPage.createReview(testReview);        
 
         // Verify details associated for item with reviews.
-        await expect(await ProductPage.tabReviewsHeader).toHaveText('Reviews');
+        await expect(await ProductPage.tabReviewsHeader).toHaveText(reviewTabDetails.sectionHeader);
         await expect(await ProductPage.noReviewsContent).not.toExist();
-        await expect(await ProductPage.reviewFormTitle).toHaveText('Add a review');
+        await expect(await ProductPage.reviewFormTitle).toHaveText(ProductPage.getReviewFormTitleText({ hasReview: true }));
         await expect(await ProductPage.reviewContainer).toExist();
         
         await expect(await ProductPage.reviewItems).toBeElementsArrayOfSize(1);
